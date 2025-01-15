@@ -109,6 +109,10 @@ static bool do_flash = false;
 static uint32_t totalSize;
 static UpdateWrapper updater = UpdateWrapper();
 
+static AsyncEventSource logging("/logging");
+char logBuffer[256];
+int logPos = 0;
+
 #if defined(MAVLINK_ENABLED)
 WiFiUDP mavlinkUDP;
 
@@ -171,6 +175,8 @@ static struct {
   {"/texture.gif", "image/gif", (uint8_t *)TEXTURE_GIF, sizeof(TEXTURE_GIF)},
   {"/p5.js", "text/javascript", (uint8_t *)P5_JS, sizeof(P5_JS)},
 #endif
+  {"/log.js", "text/javascript", (uint8_t *)LOG_JS, sizeof(LOG_JS)},
+  {"/log.html", "text/html", (uint8_t *)LOG_HTML, sizeof(LOG_HTML)},  
 };
 
 #if defined(HAS_HEADTRACKING) || defined(SUPPORT_HEADTRACKING)
@@ -711,6 +717,10 @@ static void startServices()
 #if defined(MAVLINK_ENABLED)
   server.on("/mavlink", HTTP_GET, WebMAVLinkHandler);
 #endif
+
+  server.on("/log.js", WebUpdateSendContent);
+  server.on("/log.html", WebUpdateSendContent);
+  server.addHandler(&logging);
 
   server.onNotFound(WebUpdateHandleNotFound);
 

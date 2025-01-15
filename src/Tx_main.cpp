@@ -430,6 +430,14 @@ void loop()
   {
     uint8_t c = Serial.read();
 
+    logBuffer[logPos++] = c;
+    logBuffer[logPos] = 0;
+    if (c == '\n' || logPos == sizeof(logBuffer) - 1)
+    {
+      logging.send(logBuffer);
+      logPos = 0;
+    }    
+
     // Try to parse MSP packets from the TX
     if (msp.processReceivedByte(c))
     {
