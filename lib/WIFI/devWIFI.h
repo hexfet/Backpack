@@ -7,4 +7,5 @@ extern device_t WIFI_device;
 #define HAS_WIFI
 
 extern const char *VERSION;
+extern void wifiLogger(uint8_t c);
 #endif

@@ -110,8 +110,16 @@ static uint32_t totalSize;
 static UpdateWrapper updater = UpdateWrapper();
 
 static AsyncEventSource logging("/logging");
-char logBuffer[256];
-int logPos = 0;
+static char logBuffer[256];
+static int logPos = 0;
+void wifiLogger(uint8_t c) {
+  logBuffer[logPos++] = c;
+  logBuffer[logPos] = 0;
+  if (c == '\n' || logPos == sizeof(logBuffer) - 1) {
+    logging.send(logBuffer);
+    logPos = 0;
+  }
+}
 
 #if defined(MAVLINK_ENABLED)
 WiFiUDP mavlinkUDP;
