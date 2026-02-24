@@ -124,9 +124,6 @@ function updateConfig(data) {
         if (!config['aat']) {
             if (_('rtctab')) _('rtctab').style.display = 'table-cell';
         }
-        if (config['head-tracking']) {
-            if (_('httab')) _('httab').style.display = 'table-cell';
-        }
         _('ssid').textContent = config.ssid;
     } else {
         _('apmode').style.display = 'block';
@@ -136,11 +133,14 @@ function updateConfig(data) {
             _('connect').style.display = 'none';
         }
     }
+    if (config['head-tracking']) {
+        if (_('httab')) _('httab').style.display = 'table-cell';
+    }
     if((!data.stm32 || data.stm32==="no") && _('tx_tab')) {
         mui.tabs.activate('pane-justified-2');
         _('tx_tab').style.display = 'none';
     }
-    if(config['product_name'] && _('product-name')) _('product_name').textContent = config['product_name'];
+    if(config['product_name'] && _('product_name')) _('product_name').textContent = config['product_name'];
 
     updateAatConfig(config);
 }
